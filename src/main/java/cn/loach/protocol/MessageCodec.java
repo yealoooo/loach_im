@@ -25,7 +25,7 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
     /**
      * 序列化类型
      */
-    private static final int serializableType = LoachSerializable.JAVA_SERIALIZABLE_TYPE;
+    private static final int serializableType = LoachSerializable.JSON_SERIALIZABLE_TYPE;
     
 
     @Override
@@ -77,8 +77,5 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
         log.debug("{}, {}, {}, {}, {}, {}", magicNum, version, serializerType, messageType, messageId, length);
         log.debug("{}", message);
         list.add(message);
-    }
-
-    public static void main(String[] args) {
     }
 }

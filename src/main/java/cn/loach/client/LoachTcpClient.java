@@ -6,6 +6,7 @@ import cn.loach.message.Message;
 import cn.loach.message.SingleChatMessage;
 import cn.loach.protocol.MessageCodec;
 import cn.loach.protocol.MessageIdGenerator;
+import cn.loach.service.SingleMessageServiceIMpl;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
@@ -24,11 +25,14 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 @Slf4j
 public class LoachTcpClient implements LoachTcpClientInterface{
+    Scanner scanner = new Scanner(System.in);
+
     @Override
-    public void init() {
+    public void init(String host, int port) {
         NioEventLoopGroup worker = new NioEventLoopGroup();
         try {
             Bootstrap bootstrap = new Bootstrap();
@@ -37,15 +41,37 @@ public class LoachTcpClient implements LoachTcpClientInterface{
             bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
+//                    ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     ch.pipeline().addLast(new LengthFieldFrameProtocolHandler());
                     ch.pipeline().addLast(new MessageCodec());
+                    ch.pipeline().addLast("client handler", new ChannelInboundHandlerAdapter() {
+                        @Override
+                        public void channelActive(ChannelHandlerContext ctx) {
+                            new Thread(() -> {
+                                while (true) {
+                                    System.out.println("请输入需要发送的消息");
+                                    String next = scanner.next();
+
+                                    SingleMessageServiceIMpl singleMessageServiceIMpl = SingleMessageServiceIMpl.getInstance();
+                                    SingleChatMessage sendMessage = singleMessageServiceIMpl.getSendMessageModel(next);
+
+                                    ctx.writeAndFlush(sendMessage);
+                                }
+                            }, "client handler thread").start();
+                        }
+
+                        @Override
+                        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                            log.info("客户端读取到的数据:{}", msg.toString());
+                        }
+                    });
                 }
             });
-            ChannelFuture channelFuture = bootstrap.connect(new InetSocketAddress("127.0.0.1", 8080));
+            ChannelFuture channelFuture = bootstrap.connect(new InetSocketAddress(host, port));
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException ex) {
-            log.error("client error: {}", ex);
+            log.error("client error: {}", ex.getMessage());
+            ex.printStackTrace();
         } finally {
             worker.shutdownGracefully();
         }

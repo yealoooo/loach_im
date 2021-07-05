@@ -19,7 +19,7 @@ public abstract class Message implements Serializable {
     private String messageId;
 
     /**
-     * 消息类型  默认为 JAVA 序列化
+     * 消息类型
      */
     private int messageType;
 

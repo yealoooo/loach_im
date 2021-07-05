@@ -6,5 +6,5 @@ public interface LoachTcpClientInterface {
     /**
      * 初始化链接
      */
-    void init();
+    void init(String host, int port);
 }
