@@ -1,5 +1,6 @@
 package cn.loach.server;
 
+import cn.loach.handler.LengthFieldFrameProtocolHandler;
 import cn.loach.protocol.MessageCodec;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -24,14 +25,13 @@ public class LoachTcpServer implements LoachTcpServerInterface{
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.channel(NioServerSocketChannel.class);
-//            serverBootstrap.option(ChannelOption.SO_RCVBUF, 10);
             serverBootstrap.group(boss, worker);
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
 
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
-                    ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(4096, 42, 4, 0, 0));
+                    ch.pipeline().addLast(new LengthFieldFrameProtocolHandler());
                     ch.pipeline().addLast(new MessageCodec());
 
                 }

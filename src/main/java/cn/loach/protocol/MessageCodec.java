@@ -12,11 +12,20 @@ import java.util.List;
 
 @Slf4j
 public class MessageCodec extends ByteToMessageCodec<Message> {
-    public static final int magicNum = 9559;
+    /**
+     * 魔数
+     */
+    private static final int magicNum = 9559;
 
-    public static final int messageVersion = 1;
+    /**
+     * 数据版本
+     */
+    private static final int messageVersion = 1;
 
-    public static final int serializableType = 1;
+    /**
+     * 序列化类型
+     */
+    private static final int serializableType = LoachSerializable.JAVA_SERIALIZABLE_TYPE;
     
 
     @Override
