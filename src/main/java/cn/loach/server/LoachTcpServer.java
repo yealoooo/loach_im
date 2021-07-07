@@ -35,7 +35,7 @@ public class LoachTcpServer implements LoachTcpServerInterface{
 //                    ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     ch.pipeline().addLast(new LengthFieldFrameProtocolHandler());
                     ch.pipeline().addLast(new MessageCodec());
-                    ch.pipeline().addLast(new LoginAuthHandler());
+//                    ch.pipeline().addLast(new LoginAuthHandler());
                     ch.pipeline().addLast(new ChannelInboundHandlerAdapter(){
                         @Override
                         public void channelRead(ChannelHandlerContext ctx, Object msg) {

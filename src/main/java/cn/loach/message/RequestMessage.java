@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class RequestMessage extends Message implements Serializable {
+public class RequestMessage extends Message implements Serializable {
 
     /**
      * token

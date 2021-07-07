@@ -1,6 +1,7 @@
 package cn.loach.client;
 
 import cn.loach.handler.LengthFieldFrameProtocolHandler;
+import cn.loach.message.RequestMessage;
 import cn.loach.message.SingleChatMessage;
 import cn.loach.protocol.MessageCodec;
 import cn.loach.service.SingleMessageServiceIMpl;
