@@ -19,14 +19,15 @@ public abstract class Message implements Serializable {
     private String messageId;
 
     /**
+     * 消息发生时间
+     */
+    private long timeStamp;
+
+    /**
      * 消息类型   如: 一对一聊天发送  、 一对一聊天接收
      */
     private int messageRequestTypeType;
 
-    /**
-     * 消息发生时间
-     */
-    private long timeStamp;
 
     /**
      * Message  所有消息类型
@@ -35,9 +36,6 @@ public abstract class Message implements Serializable {
     public static final int SINGLE_CHAT_MESSAGE_RESPONSE_TYPE = 2; // 一对一聊天接收
 
     public static final int LOGIN_AUTH_MESSAGE_TYPE = 3;
-
-    public static final int ERROR_RESPONSE_MESSAGE_TYPE = 500;
-
 
     public static final Map<Integer, Class<? extends Message>> messageClassMap = new HashMap<>();
 

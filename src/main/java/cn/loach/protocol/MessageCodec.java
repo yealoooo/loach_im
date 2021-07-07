@@ -1,6 +1,7 @@
 package cn.loach.protocol;
 
 import cn.loach.message.Message;
+import cn.loach.message.ResponseMessage;
 import cn.loach.serializable.LoachSerializable;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -11,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
-public class MessageCodec extends ByteToMessageCodec<Message> {
+public class MessageCodec extends ByteToMessageCodec<ResponseMessage> {
     /**
      * 魔数
      */
@@ -29,7 +30,7 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
     
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Message message, ByteBuf byteBuf) {
+    protected void encode(ChannelHandlerContext ctx, ResponseMessage responseMessage, ByteBuf byteBuf) {
         // 定义 魔数表示  4字节
         byteBuf.writeInt(magicNum);
         // 定义 消息版本  1字节
@@ -37,13 +38,13 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
         // 定义 序列化方式 1字节
         byteBuf.writeByte(serializableType);
         // 定义 消息类型   4字节
-        byteBuf.writeInt(message.getMessageRequestTypeType());
+        byteBuf.writeInt(responseMessage.getMessageRequestTypeType());
         // 定义消息唯一标识 32字节
-        byteBuf.writeBytes(message.getMessageId().getBytes(StandardCharsets.UTF_8));
+        byteBuf.writeBytes(responseMessage.getMessageId().getBytes(StandardCharsets.UTF_8));
         // 获取内容的字节数组
         byte[] dataBytes = LoachSerializable
                 .getSerializable(serializableType)
-                .serialize(message);
+                .serialize(responseMessage);
 
         // 内容长度 4字节
         byteBuf.writeInt(dataBytes.length);

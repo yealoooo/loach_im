@@ -1,14 +1,14 @@
 package cn.loach.message;
 
-import lombok.AllArgsConstructor;
+import cn.loach.util.MessageIdGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ResponseMessage extends Message{
     /**
      * 返回请求结果码
@@ -30,7 +30,19 @@ public class ResponseMessage extends Message{
      */
     private Message responseContent;
 
-    public static ResponseMessage success(int code, String responseMessage, RequestMessage responseContent) {
+    private ResponseMessage(int code, String responseMessage, boolean requestFlag, Message responseContent) {
+        this.code = code;
+        this.responseMessage = responseMessage;
+        this.requestFlag = requestFlag;
+        this.responseContent = responseContent;
+        setMessageId(MessageIdGenerator.getMessageId());
+        setTimeStamp(System.currentTimeMillis());
+        if (null != responseContent) {
+            setMessageRequestTypeType(responseContent.getMessageRequestTypeType());
+        }
+    }
+
+    private static ResponseMessage success(int code, String responseMessage, RequestMessage responseContent) {
         return new ResponseMessage(code, responseMessage, true, responseContent);
     }
 
