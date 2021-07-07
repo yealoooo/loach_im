@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class LoginAuthMessage extends Message implements Serializable {
 
     /**
@@ -17,12 +16,11 @@ public class LoginAuthMessage extends Message implements Serializable {
     private String userName;
 
     /**
-     * 密码
+     * token
      */
-    private String passWord;
+    private String token;
 
-    @Override
-    public int getMessageType() {
-        return LOGIN_AUTH_MESSAGE_TYPE;
+    public LoginAuthMessage() {
+        setMessageRequestTypeType(LOGIN_AUTH_MESSAGE_TYPE);
     }
 }

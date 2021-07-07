@@ -29,7 +29,6 @@ public class SingleMessageServiceIMpl implements SingleMessageService{
         singleChatMessage.setMessageId(UUID.randomUUID().toString().toUpperCase().replace("-", ""));
         singleChatMessage.setContent(message);
         singleChatMessage.setContentType(MessageContentTypeEnum.TEXT);
-        singleChatMessage.setMessageType(Message.SINGLE_CHAT_MESSAGE_REQUEST_TYPE);
 
         return singleChatMessage;
     }

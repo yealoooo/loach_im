@@ -37,7 +37,7 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
         // 定义 序列化方式 1字节
         byteBuf.writeByte(serializableType);
         // 定义 消息类型   4字节
-        byteBuf.writeInt(message.getMessageType());
+        byteBuf.writeInt(message.getMessageRequestTypeType());
         // 定义消息唯一标识 32字节
         byteBuf.writeBytes(message.getMessageId().getBytes(StandardCharsets.UTF_8));
         // 获取内容的字节数组
@@ -60,7 +60,7 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
 
         byte serializerType = in.readByte();
 
-        int messageType = in.readInt();
+        int messageRequestTypeType = in.readInt();
 
         byte[] idByte = new byte[32];
         in.readBytes(idByte);
@@ -72,9 +72,9 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
 
         Message message = LoachSerializable
                 .getSerializable(serializableType)
-                .deserialize(Message.messageClassMap.get(messageType), bytes);
+                .deserialize(Message.messageClassMap.get(messageRequestTypeType), bytes);
 
-        log.debug("{}, {}, {}, {}, {}, {}", magicNum, version, serializerType, messageType, messageId, length);
+        log.debug("{}, {}, {}, {}, {}, {}", magicNum, version, serializerType, messageRequestTypeType, messageId, length);
         log.debug("{}", message);
         list.add(message);
     }

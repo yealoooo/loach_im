@@ -1,6 +1,7 @@
 package cn.loach.server;
 
 import cn.loach.handler.LengthFieldFrameProtocolHandler;
+import cn.loach.handler.LoginAuthHandler;
 import cn.loach.message.SingleChatMessage;
 import cn.loach.protocol.MessageCodec;
 import cn.loach.service.SingleMessageServiceIMpl;
@@ -34,9 +35,10 @@ public class LoachTcpServer implements LoachTcpServerInterface{
 //                    ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     ch.pipeline().addLast(new LengthFieldFrameProtocolHandler());
                     ch.pipeline().addLast(new MessageCodec());
+                    ch.pipeline().addLast(new LoginAuthHandler());
                     ch.pipeline().addLast(new ChannelInboundHandlerAdapter(){
                         @Override
-                        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                        public void channelRead(ChannelHandlerContext ctx, Object msg) {
                             log.info("服务端读取到数据:{}", msg.toString());
 
                             SingleMessageServiceIMpl singleMessageServiceIMpl = SingleMessageServiceIMpl.getInstance();

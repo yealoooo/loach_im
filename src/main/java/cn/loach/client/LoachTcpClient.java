@@ -1,14 +1,10 @@
 package cn.loach.client;
 
-import cn.loach.enums.MessageContentTypeEnum;
 import cn.loach.handler.LengthFieldFrameProtocolHandler;
-import cn.loach.message.Message;
 import cn.loach.message.SingleChatMessage;
 import cn.loach.protocol.MessageCodec;
-import cn.loach.protocol.MessageIdGenerator;
 import cn.loach.service.SingleMessageServiceIMpl;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -16,15 +12,9 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 @Slf4j
@@ -61,7 +51,7 @@ public class LoachTcpClient implements LoachTcpClientInterface{
                         }
 
                         @Override
-                        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                        public void channelRead(ChannelHandlerContext ctx, Object msg) {
                             log.info("客户端读取到的数据:{}", msg.toString());
                         }
                     });
