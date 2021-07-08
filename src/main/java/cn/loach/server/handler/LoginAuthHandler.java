@@ -30,14 +30,14 @@ public class LoginAuthHandler extends ChannelInboundHandlerAdapter {
 
             if (StringUtil.isEmpty(messageFromId, authToken)) {
                 //处理 登录失败
-                ctx.writeAndFlush(error());
+//                ctx.writeAndFlush(error());
                 return;
             }
 
             //TODO 验证TOKEN是否正确
 
             if (!SessionContainer.set(messageFromId, authToken, ctx)) {
-                ctx.writeAndFlush(error());
+//                ctx.writeAndFlush(error());
                 return;
             }
 //
@@ -47,19 +47,19 @@ public class LoginAuthHandler extends ChannelInboundHandlerAdapter {
             RequestMessage requestMessage = (RequestMessage) msg;
             // 验证token
             if (StringUtil.isEmpty(requestMessage.getAuthToken())) {
-                ctx.writeAndFlush(error());
+//                ctx.writeAndFlush(error());
                 return;
             }
 
             // 根据token获取用户Id
             String userId = SessionContainer.getUserIdByToken(requestMessage.getAuthToken());
             if (StringUtil.isEmpty(userId)) {
-                ctx.writeAndFlush(error());
+//                ctx.writeAndFlush(error());
                 return;
             }
 
             if (!userId.equals(requestMessage.getFromId())) {
-                ctx.writeAndFlush(error());
+//                ctx.writeAndFlush(error());
                 return;
             }
 
