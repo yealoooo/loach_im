@@ -13,10 +13,6 @@ import java.util.List;
 @Slf4j
 public class MessageDecoder extends ByteToMessageDecoder {
 
-    /**
-     * 序列化类型
-     */
-    private static final int serializableType = LoachSerializable.JSON_SERIALIZABLE_TYPE;
 
 
     @Override
@@ -31,6 +27,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
 
         byte[] idByte = new byte[32];
         in.readBytes(idByte);
+
         String messageId = new String(idByte, StandardCharsets.UTF_8);
 
         int length = in.readInt();
@@ -38,13 +35,9 @@ public class MessageDecoder extends ByteToMessageDecoder {
         in.readBytes(bytes, 0, length);
 
         Message message = LoachSerializable
-                .getSerializable(serializableType)
+                .getSerializable(serializerType)
                 .deserialize(Message.messageClassMap.get(messageRequestTypeType), bytes);
 
-
-
-        log.debug("{}, {}, {}, {}, {}, {}", magicNum, version, serializerType, messageRequestTypeType, messageId, length);
-        log.debug("requestMessage: {}", message);
         list.add(message);
     }
 }

@@ -1,9 +1,8 @@
 package cn.loach.server.handler;
 
-import cn.loach.server.message.LoginAuthMessage;
+import cn.loach.server.message.response.LoginAuthResponseMessage;
 import cn.loach.server.message.Message;
 import cn.loach.server.message.request.RequestMessage;
-import cn.loach.server.message.response.ResponseMessage;
 import cn.loach.server.session.SessionContainer;
 import cn.loach.util.StringUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,11 +20,11 @@ public class LoginAuthHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-        Message msg1 = (Message) msg;
-        if (msg1.getMessageRequestTypeType() == Message.LOGIN_AUTH_MESSAGE_TYPE) {
-            LoginAuthMessage loginAuthMessage = (LoginAuthMessage) msg1;
+        RequestMessage msg1 = (RequestMessage) msg;
+//        if (msg1.getMessageRequestTypeType() == Message.LOGIN_AUTH_MESSAGE_REQUEST_TYPE) {
+//            LoginAuthResponseMessage loginAuthResponseMessage = (LoginAuthResponseMessage) msg1;
             // 注册
-            String messageFromId = loginAuthMessage.getUserName();
+            String messageFromId = msg1.getFromId();
             String authToken = UUID.randomUUID().toString();
 
             if (StringUtil.isEmpty(messageFromId, authToken)) {
@@ -38,12 +37,12 @@ public class LoginAuthHandler extends ChannelInboundHandlerAdapter {
 
             if (!SessionContainer.set(messageFromId, authToken, ctx)) {
 //                ctx.writeAndFlush(error());
-                return;
+//                return;
             }
 //
 //            ResponseMessage responseMessage = ResponseMessage.success(200, "Auth Success");
 //            ctx.writeAndFlush(responseMessage);
-        }else {
+        /*}*//*else {
             RequestMessage requestMessage = (RequestMessage) msg;
             // 验证token
             if (StringUtil.isEmpty(requestMessage.getAuthToken())) {
@@ -68,6 +67,8 @@ public class LoginAuthHandler extends ChannelInboundHandlerAdapter {
         }
 
         super.channelRead(ctx, msg);
+    */
+        ctx.fireChannelRead(msg);
     }
 
 //    private ResponseMessage error() {
