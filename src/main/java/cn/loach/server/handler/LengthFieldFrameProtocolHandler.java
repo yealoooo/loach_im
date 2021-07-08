@@ -1,4 +1,4 @@
-package cn.loach.handler;
+package cn.loach.server.handler;
 
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 

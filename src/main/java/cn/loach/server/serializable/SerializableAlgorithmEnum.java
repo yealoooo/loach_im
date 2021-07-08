@@ -1,12 +1,8 @@
-package cn.loach.serializable;
+package cn.loach.server.serializable;
 
-import cn.loach.message.Message;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONWriter;
-import io.netty.util.CharsetUtil;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public enum SerializableAlgorithmEnum implements SerializableInterface {

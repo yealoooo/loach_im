@@ -1,17 +1,17 @@
-package cn.loach.protocol;
+package cn.loach.server.protocol;
 
-import cn.loach.message.Message;
-import cn.loach.serializable.LoachSerializable;
+import cn.loach.server.message.Message;
+import cn.loach.server.message.response.ResponseMessage;
+import cn.loach.server.serializable.LoachSerializable;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageCodec;
+import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Slf4j
-public class MessageCodec extends ByteToMessageCodec<Message> {
+public class MessageEcoder extends MessageToByteEncoder<Message> {
     /**
      * 魔数
      */
@@ -26,7 +26,7 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
      * 序列化类型
      */
     private static final int serializableType = LoachSerializable.JSON_SERIALIZABLE_TYPE;
-    
+
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Message message, ByteBuf byteBuf) {
@@ -50,31 +50,5 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
         // 8. 写入内容
         byteBuf.writeBytes(dataBytes);
 
-    }
-
-    @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> list) {
-        int magicNum = in.readInt();
-
-        byte version = in.readByte();
-
-        byte serializerType = in.readByte();
-
-        int messageRequestTypeType = in.readInt();
-
-        byte[] idByte = new byte[32];
-        in.readBytes(idByte);
-        String messageId = new String(idByte, StandardCharsets.UTF_8);
-
-        int length = in.readInt();
-        byte[] bytes = new byte[length];
-        in.readBytes(bytes, 0, length);
-
-        Message message = LoachSerializable
-                .getSerializable(serializableType)
-                .deserialize(Message.messageClassMap.get(messageRequestTypeType), bytes);
-        log.debug("{}, {}, {}, {}, {}, {}", magicNum, version, serializerType, messageRequestTypeType, messageId, length);
-        log.debug("{}", message);
-        list.add(message);
     }
 }

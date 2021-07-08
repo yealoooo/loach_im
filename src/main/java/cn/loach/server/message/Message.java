@@ -1,5 +1,6 @@
-package cn.loach.message;
+package cn.loach.server.message;
 
+import cn.loach.server.message.request.SingleChatRequestMessage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,7 +29,6 @@ public abstract class Message implements Serializable {
      */
     private int messageRequestTypeType;
 
-
     /**
      * Message  所有消息类型
      */
@@ -40,8 +40,8 @@ public abstract class Message implements Serializable {
     public static final Map<Integer, Class<? extends Message>> messageClassMap = new HashMap<>();
 
     static {
-        messageClassMap.put(SINGLE_CHAT_MESSAGE_REQUEST_TYPE, SingleChatMessage.class);
-        messageClassMap.put(SINGLE_CHAT_MESSAGE_RESPONSE_TYPE, SingleChatMessage.class);
+        messageClassMap.put(SINGLE_CHAT_MESSAGE_REQUEST_TYPE, SingleChatRequestMessage.class);
+        messageClassMap.put(SINGLE_CHAT_MESSAGE_RESPONSE_TYPE, SingleChatRequestMessage.class);
         messageClassMap.put(LOGIN_AUTH_MESSAGE_TYPE, LoginAuthMessage.class);
     }
 }

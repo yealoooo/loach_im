@@ -1,6 +1,7 @@
-package cn.loach.message;
+package cn.loach.server.message.request;
 
-import cn.loach.enums.MessageContentTypeEnum;
+import cn.loach.server.enums.MessageContentTypeEnum;
+import cn.loach.server.message.Message;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

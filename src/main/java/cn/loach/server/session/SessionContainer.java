@@ -1,4 +1,4 @@
-package cn.loach.session;
+package cn.loach.server.session;
 
 import cn.loach.util.StringUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,6 +12,7 @@ public class SessionContainer {
     private static final Map<String, String> tokenMap = new HashMap<>();
     private static final Map<String, String> tokenMapRevere = new HashMap<>();
     private static final Map<String, ChannelHandlerContext> ctxMap = new HashMap<>();
+
 
     public static final Set<String> userNameSet = new HashSet<String>(){{
         add("张三");

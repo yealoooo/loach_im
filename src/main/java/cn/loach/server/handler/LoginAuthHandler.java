@@ -1,24 +1,28 @@
-package cn.loach.handler;
+package cn.loach.server.handler;
 
-import cn.loach.message.LoginAuthMessage;
-import cn.loach.message.Message;
-import cn.loach.message.RequestMessage;
-import cn.loach.message.ResponseMessage;
-import cn.loach.session.SessionContainer;
+import cn.loach.server.message.LoginAuthMessage;
+import cn.loach.server.message.Message;
+import cn.loach.server.message.request.RequestMessage;
+import cn.loach.server.message.response.ResponseMessage;
+import cn.loach.server.session.SessionContainer;
 import cn.loach.util.StringUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.util.UUID;
 
-import static cn.loach.message.Message.LOGIN_AUTH_MESSAGE_TYPE;
-
 public class LoginAuthHandler extends ChannelInboundHandlerAdapter {
+
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        super.channelUnregistered(ctx);
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
         Message msg1 = (Message) msg;
-        if (msg1.getMessageRequestTypeType() == LOGIN_AUTH_MESSAGE_TYPE) {
+        if (msg1.getMessageRequestTypeType() == Message.LOGIN_AUTH_MESSAGE_TYPE) {
             LoginAuthMessage loginAuthMessage = (LoginAuthMessage) msg1;
             // 注册
             String messageFromId = loginAuthMessage.getUserName();
@@ -36,9 +40,9 @@ public class LoginAuthHandler extends ChannelInboundHandlerAdapter {
                 ctx.writeAndFlush(error());
                 return;
             }
-
-            ResponseMessage responseMessage = ResponseMessage.success(200, "Auth Success");
-            ctx.writeAndFlush(responseMessage);
+//
+//            ResponseMessage responseMessage = ResponseMessage.success(200, "Auth Success");
+//            ctx.writeAndFlush(responseMessage);
         }else {
             RequestMessage requestMessage = (RequestMessage) msg;
             // 验证token
@@ -66,7 +70,7 @@ public class LoginAuthHandler extends ChannelInboundHandlerAdapter {
         super.channelRead(ctx, msg);
     }
 
-    private ResponseMessage error() {
-        return ResponseMessage.error(501, "Auth Error");
-    }
+//    private ResponseMessage error() {
+//        return ResponseMessage.error(501, "Auth Error");
+//    }
 }

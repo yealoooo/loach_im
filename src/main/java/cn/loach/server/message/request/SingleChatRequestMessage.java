@@ -1,14 +1,14 @@
-package cn.loach.message;
+package cn.loach.server.message.request;
 
 
-import cn.loach.enums.MessageContentTypeEnum;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.io.Serializable;
 
 @Getter
 @AllArgsConstructor
-public class SingleChatMessage extends RequestMessage implements Serializable {
+public class SingleChatRequestMessage extends RequestMessage implements Serializable {
     /**
      * 数据体
      */
@@ -24,7 +24,7 @@ public class SingleChatMessage extends RequestMessage implements Serializable {
                 '}' + super.toString();
     }
 
-    public SingleChatMessage() {
+    public SingleChatRequestMessage() {
         setMessageRequestTypeType(SINGLE_CHAT_MESSAGE_REQUEST_TYPE);
     }
 

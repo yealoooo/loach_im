@@ -1,4 +1,4 @@
-package cn.loach.serializable;
+package cn.loach.server.serializable;
 
 import java.util.HashMap;
 import java.util.Map;
