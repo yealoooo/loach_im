@@ -1,1 +1,1 @@
-# loach_im
+# loach_im 基于netty实现的即时通讯项目  此项目为服务端, 客户端可以看loach_im_client
