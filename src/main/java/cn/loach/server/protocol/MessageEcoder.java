@@ -25,7 +25,7 @@ public class MessageEcoder extends MessageToByteEncoder<Message> {
     /**
      * 序列化类型
      */
-    private static final int serializableType = LoachSerializable.JSON_SERIALIZABLE_TYPE;
+    private static final byte serializableType = LoachSerializable.JSON_SERIALIZABLE_TYPE;
 
 
     @Override
