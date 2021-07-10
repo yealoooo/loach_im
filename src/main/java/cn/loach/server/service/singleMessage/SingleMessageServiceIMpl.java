@@ -1,7 +1,8 @@
-package cn.loach.server.service;
+package cn.loach.server.service.singleMessage;
 
 import cn.loach.server.enums.MessageContentTypeEnum;
 import cn.loach.server.message.request.SingleChatRequestMessage;
+import cn.loach.server.message.response.SingleChatResponseMessage;
 
 import java.util.UUID;
 
@@ -22,13 +23,15 @@ public class SingleMessageServiceIMpl implements SingleMessageService {
     }
 
     @Override
-    public SingleChatRequestMessage getSendMessageModel(String message) {
+    public SingleChatResponseMessage getSendMessageModel(SingleChatRequestMessage message) {
 
-        SingleChatRequestMessage singleChatRequestMessage = new SingleChatRequestMessage();
-        singleChatRequestMessage.setMessageId(UUID.randomUUID().toString().toUpperCase().replace("-", ""));
-        singleChatRequestMessage.setContent(message);
-        singleChatRequestMessage.setContentType(MessageContentTypeEnum.TEXT);
+        SingleChatResponseMessage singleChatResponseMessage = new SingleChatResponseMessage();
+        singleChatResponseMessage.setMessageId(UUID.randomUUID().toString().toUpperCase().replace("-", ""));
+        singleChatResponseMessage.setContent(message.getContent());
+        singleChatResponseMessage.setContentType(MessageContentTypeEnum.TEXT.name());
+        singleChatResponseMessage.setFromId(message.getFromId());
+        singleChatResponseMessage.setToId(message.getToId());
 
-        return singleChatRequestMessage;
+        return singleChatResponseMessage;
     }
 }
