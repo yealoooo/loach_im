@@ -1,7 +1,8 @@
 package cn.loach.server.message.response;
 
+import cn.loach.server.enums.MessageContentTypeEnum;
+import cn.loach.util.MessageIdGenerator;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -23,6 +24,9 @@ public class SingleChatResponseMessage extends ResponseMessage{
     private String toId;
 
     public SingleChatResponseMessage() {
-        setMessageRequestTypeType(SINGLE_CHAT_MESSAGE_RESPONSE_TYPE);
+        setTimeStamp(System.currentTimeMillis());
+        setContentType(MessageContentTypeEnum.TEXT);
+        setMessageId(MessageIdGenerator.getMessageId());
+        setMessageRequestTypeType(LOGIN_AUTH_MESSAGE_REQUEST_TYPE);
     }
 }

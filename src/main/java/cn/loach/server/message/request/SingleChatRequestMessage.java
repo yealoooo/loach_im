@@ -23,12 +23,4 @@ public class SingleChatRequestMessage extends RequestMessage implements Serializ
                 ", content='" + content + '\'' +
                 '}' + super.toString();
     }
-
-    public SingleChatRequestMessage() {
-        setMessageRequestTypeType(SINGLE_CHAT_MESSAGE_REQUEST_TYPE);
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 }

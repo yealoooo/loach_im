@@ -1,5 +1,6 @@
 package cn.loach.server.message.response;
 
+import cn.loach.server.enums.MessageContentTypeEnum;
 import cn.loach.server.message.Message;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,11 +30,8 @@ public class ResponseMessage extends Message {
      */
     private String contentType;
 
-    private ResponseMessage(int code, String responseMessage, boolean requestFlag) {
-        this.code = code;
-        this.responseMessage = responseMessage;
-        this.requestFlag = requestFlag;
+
+    public void setContentType(MessageContentTypeEnum messageContentTypeEnum) {
+        this.contentType = messageContentTypeEnum.name();
     }
-
-
 }
