@@ -7,28 +7,21 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
 public class MessageDecoder extends ByteToMessageDecoder {
 
-
-
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> list) {
+
         int magicNum = in.readInt();
 
-        byte version = in.readByte();
+        int version = in.readInt();
 
-        byte serializerType = in.readByte();
+        int serializerType = in.readInt();
 
         int messageRequestTypeType = in.readInt();
-
-        byte[] idByte = new byte[32];
-        in.readBytes(idByte);
-
-        String messageId = new String(idByte, StandardCharsets.UTF_8);
 
         int length = in.readInt();
         byte[] bytes = new byte[length];
