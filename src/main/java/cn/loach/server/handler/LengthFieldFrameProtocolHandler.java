@@ -5,7 +5,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 public class LengthFieldFrameProtocolHandler extends LengthFieldBasedFrameDecoder {
 
     public LengthFieldFrameProtocolHandler() {
-        this(4096, 16, 4, 0, 0);
+        this(4096, 80, 4, 0, 0);
     }
 
     private LengthFieldFrameProtocolHandler(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, int lengthAdjustment, int initialBytesToStrip) {
