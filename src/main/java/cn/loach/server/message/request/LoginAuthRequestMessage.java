@@ -20,6 +20,6 @@ public class LoginAuthRequestMessage extends RequestMessage implements Serializa
     private String token;
 
     public LoginAuthRequestMessage() {
-        setMessageRequestTypeType(LOGIN_AUTH_MESSAGE_REQUEST_TYPE);
+//        setChatType(LOGIN_AUTH_MESSAGE_REQUEST_TYPE);
     }
 }

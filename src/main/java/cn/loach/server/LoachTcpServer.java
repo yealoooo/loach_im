@@ -1,5 +1,6 @@
 package cn.loach.server;
 
+import cn.loach.server.handler.AuthHandler;
 import cn.loach.server.handler.LengthFieldFrameProtocolHandler;
 import cn.loach.server.handler.LoginAuthRequestHandler;
 import cn.loach.server.handler.SingleMessageRequestHandler;
@@ -36,7 +37,7 @@ public class LoachTcpServer implements LoachTcpServerInterface{
                     ch.pipeline().addLast(new LengthFieldFrameProtocolHandler());
                     ch.pipeline().addLast(new MessageDecoder());
                     ch.pipeline().addLast(new MessageEcoder());
-                    ch.pipeline().addLast(new LoginAuthRequestHandler());
+                    ch.pipeline().addLast(new AuthHandler());
                     ch.pipeline().addLast(new SingleMessageRequestHandler());
 
                 }

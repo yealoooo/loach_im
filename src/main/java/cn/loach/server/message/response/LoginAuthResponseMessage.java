@@ -25,6 +25,6 @@ public class LoginAuthResponseMessage extends ResponseMessage implements Seriali
         setMessageId(MessageIdGenerator.getMessageId());
         setContentType(MessageContentTypeEnum.TEXT);
         setTimeStamp(System.currentTimeMillis());
-        setMessageRequestTypeType(LOGIN_AUTH_MESSAGE_RESPONSE_TYPE);
+//        setChatType(LOGIN_AUTH_MESSAGE_RESPONSE_TYPE);
     }
 }

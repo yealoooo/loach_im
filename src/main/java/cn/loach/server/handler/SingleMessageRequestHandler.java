@@ -23,8 +23,8 @@ public class SingleMessageRequestHandler extends SimpleChannelInboundHandler<Sin
 //        if (null == toUserCtx) {
 //            log.error("用户未在线");
 //        }else {
-            SingleChatResponseMessage singleChatResponseMessage = singleMessageService.getSendMessageModel(msg);
-            singleChatResponseMessage.setContent("你好");
+        SingleChatResponseMessage singleChatResponseMessage = singleMessageService.getSendMessageModel(msg);
+        singleChatResponseMessage.setContent("你好");
         ctx.writeAndFlush(singleChatResponseMessage);
 //        }
 

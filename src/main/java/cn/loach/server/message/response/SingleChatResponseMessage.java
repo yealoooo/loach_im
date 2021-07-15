@@ -27,6 +27,6 @@ public class SingleChatResponseMessage extends ResponseMessage{
         setTimeStamp(System.currentTimeMillis());
         setContentType(MessageContentTypeEnum.TEXT);
         setMessageId(MessageIdGenerator.getMessageId());
-        setMessageRequestTypeType(LOGIN_AUTH_MESSAGE_REQUEST_TYPE);
+//        setChatType(LOGIN_AUTH_MESSAGE_REQUEST_TYPE);
     }
 }

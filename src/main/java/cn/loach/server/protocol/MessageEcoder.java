@@ -34,7 +34,7 @@ public class MessageEcoder extends MessageToByteEncoder<Message> {
         // 定义 序列化方式 4字节
         byteBuf.writeInt(serializableType);
         // 定义 消息类型   4字节
-        byteBuf.writeInt(message.getMessageRequestTypeType());
+        byteBuf.writeInt(message.getChatType());
         // 获取内容的字节数组
         byte[] dataBytes = LoachSerializable
                 .getSerializable(serializableType)
