@@ -35,6 +35,8 @@ public class MessageEcoder extends MessageToByteEncoder<Message> {
         byteBuf.writeInt(serializableType);
         // 定义 消息类型   4字节
         byteBuf.writeInt(message.getChatType());
+        // messageType
+        byteBuf.writeInt(message.getMessageType());
         // 获取内容的字节数组
         byte[] dataBytes = LoachSerializable
                 .getSerializable(serializableType)

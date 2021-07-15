@@ -9,37 +9,33 @@ import java.util.Map;
 import java.util.Set;
 
 public class SessionContainer {
-    private static final Map<String, String> tokenMap = new HashMap<>();
-    private static final Map<String, String> tokenMapRevere = new HashMap<>();
-    private static final Map<String, ChannelHandlerContext> ctxMap = new HashMap<>();
+    private static final Map<String, String> uidToTokenMap = new HashMap<>();
+    private static final Map<String, ChannelHandlerContext> uidToChannelMap = new HashMap<>();
 
+    private static final Set<String> tcpUserId = new HashSet<>();
+    private static final Set<String> webSocketUserId = new HashSet<>();
 
-    public static final Set<String> userNameSet = new HashSet<String>(){{
-        add("张三");
-        add("李四");
-    }};
-
-    public static boolean set(String userId, String token, ChannelHandlerContext ctx) {
-        tokenMap.put(userId, token);
-        ctxMap.put(userId, ctx);
-        tokenMapRevere.put(token, userId);
-
+    public static boolean set(String uid, String token, ChannelHandlerContext ctx) {
+        uidToChannelMap.put(uid, ctx);
+        uidToTokenMap.put(uid, token);
         return true;
     }
 
-    public static ChannelHandlerContext getCtxByToken(String token) {
-        String userId = getUserIdByToken(token);
-        if (StringUtil.isEmpty(userId)) return null;
-        return ctxMap.get(userId);
+    public static ChannelHandlerContext getChannelByUid(String uid) {
+        if (StringUtil.isEmpty(uid)) return null;
+        return uidToChannelMap.get(uid);
     }
 
-    public static ChannelHandlerContext getCtxByUserId(String userId) {
-        if (StringUtil.isEmpty(userId)) return null;
-        return ctxMap.get(userId);
+    public static String getTokenByUid(String uid) {
+        if (StringUtil.isEmpty(uid)) return null;
+        return uidToTokenMap.get(uid);
     }
 
-    public static String getUserIdByToken(String token) {
-        if (StringUtil.isEmpty(token)) return null;
-        return tokenMapRevere.get(token);
+    public static boolean setTcpUid(String uid) {
+        return tcpUserId.add(uid);
+    }
+
+    public static boolean setWebSocketUid(String uid) {
+        return webSocketUserId.add(uid);
     }
 }

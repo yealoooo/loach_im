@@ -1,5 +1,6 @@
 package cn.loach.server.service.loginAuth.impl;
 
+import cn.loach.server.enums.MessageContentTypeEnum;
 import cn.loach.server.message.request.LoginAuthRequestMessage;
 import cn.loach.server.message.response.LoginAuthResponseMessage;
 import cn.loach.server.service.loginAuth.LoginAuthService;
@@ -24,12 +25,13 @@ public class LoginAuthServiceImpl implements LoginAuthService {
 
     @Override
     public LoginAuthResponseMessage authLoginData(LoginAuthRequestMessage loginAuthRequestMessage) {
-        String loginUsername = loginAuthRequestMessage.getUserName();
+        LoginAuthResponseMessage loginAuthResponseMessage = new LoginAuthResponseMessage();
 
-        if (SessionContainer.userNameSet.contains(loginUsername)) {
-            LoginAuthResponseMessage loginAuthResponseMessage = new LoginAuthResponseMessage();
+        String authToken = loginAuthRequestMessage.getAuthToken();
+        if (authToken.equals("token")) {
             loginAuthResponseMessage.setCode(200);
-            loginAuthResponseMessage.setUserName(loginUsername);
+            loginAuthResponseMessage.setContentType(MessageContentTypeEnum.TEXT);
+            loginAuthResponseMessage.setContent("认证成功");
 
             return loginAuthResponseMessage;
         }

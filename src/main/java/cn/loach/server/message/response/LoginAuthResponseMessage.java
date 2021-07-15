@@ -11,20 +11,13 @@ import java.io.Serializable;
 @Setter
 public class LoginAuthResponseMessage extends ResponseMessage implements Serializable {
 
-    /**
-     * 用户名
-     */
-    private String userName;
-
-    /**
-     * token
-     */
-    private String token;
+    private String content;
 
     public LoginAuthResponseMessage() {
         setMessageId(MessageIdGenerator.getMessageId());
         setContentType(MessageContentTypeEnum.TEXT);
         setTimeStamp(System.currentTimeMillis());
-//        setChatType(LOGIN_AUTH_MESSAGE_RESPONSE_TYPE);
+        setChatType(AUTH);
+        setMessageType(MESSAGE_RESPONSE_TYPE);
     }
 }

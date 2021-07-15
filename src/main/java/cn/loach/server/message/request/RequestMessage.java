@@ -31,10 +31,10 @@ public class RequestMessage extends Message implements Serializable {
     /**
      * 数据类型
      */
-    private String contentType;
+    private int contentType;
 
     public void setContentType(MessageContentTypeEnum messageContentTypeEnum) {
-        this.contentType = messageContentTypeEnum.name();
+        this.contentType = messageContentTypeEnum.ordinal();
     }
 
 }

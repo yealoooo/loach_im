@@ -16,7 +16,12 @@ public class LoginAuthRequestHandler extends SimpleChannelInboundHandler<LoginAu
     public void channelRead0(ChannelHandlerContext ctx, LoginAuthRequestMessage msg) {
         LoginAuthResponseMessage loginAuthResponseMessage = loginAuthService.authLoginData(msg);
         if (loginAuthResponseMessage.getCode() == 200) {
-            SessionContainer.set(msg.getUserName(), loginAuthResponseMessage.getToken(), ctx);
+            // 保存 用户Id对应的通道
+            // 根据token 解析uid
+            String token = msg.getAuthToken();
+            String uid = "";
+            SessionContainer.set(uid, token, ctx);
+
             ctx.writeAndFlush(loginAuthResponseMessage);
         }
     }

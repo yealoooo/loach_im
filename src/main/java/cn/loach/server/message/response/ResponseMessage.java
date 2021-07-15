@@ -25,13 +25,14 @@ public class ResponseMessage extends Message {
      * 请求成功与否表示
      */
     private boolean requestFlag;
+
     /**
      * 数据类型
      */
-    private String contentType;
+    private int contentType;
 
 
     public void setContentType(MessageContentTypeEnum messageContentTypeEnum) {
-        this.contentType = messageContentTypeEnum.name();
+        this.contentType = messageContentTypeEnum.ordinal();
     }
 }

@@ -1,8 +1,7 @@
 package cn.loach.server;
 
-import cn.loach.server.handler.AuthHandler;
+import cn.loach.server.handler.*;
 import cn.loach.server.handler.LengthFieldFrameProtocolHandler;
-import cn.loach.server.handler.LoginAuthRequestHandler;
 import cn.loach.server.handler.SingleMessageRequestHandler;
 import cn.loach.server.protocol.MessageEcoder;
 import cn.loach.server.protocol.MessageDecoder;
@@ -20,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 public class LoachTcpServer implements LoachTcpServerInterface{
 
 
+    public static final LengthFieldFrameProtocolHandler LengthFieldFrameProtocolHandler = new LengthFieldFrameProtocolHandler();
+
     @Override
     public void init() {
         NioEventLoopGroup boss = new NioEventLoopGroup();
@@ -34,11 +35,18 @@ public class LoachTcpServer implements LoachTcpServerInterface{
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
-                    ch.pipeline().addLast(new LengthFieldFrameProtocolHandler());
-                    ch.pipeline().addLast(new MessageDecoder());
-                    ch.pipeline().addLast(new MessageEcoder());
-                    ch.pipeline().addLast(new AuthHandler());
-                    ch.pipeline().addLast(new SingleMessageRequestHandler());
+                    // websocket、tcp 选择处理器
+                    ch.pipeline().addLast(new SocketChooseHandle());
+                    // 粘包半包处理器
+                    ch.pipeline().addLast("lengthFieldFrameProtocolHandler", new LengthFieldFrameProtocolHandler());
+                    // byte -> message
+                    ch.pipeline().addLast("tcpByteDecode", new MessageDecoder());
+                    // message -> byte
+                    ch.pipeline().addLast("tcpMessageEcode", new MessageEcoder());
+                    // 校验
+                    ch.pipeline().addLast("authHandler", new LoginAuthRequestHandler());
+                    // 一对一单聊
+                    ch.pipeline().addLast("singleChatHandler", new SingleMessageRequestHandler());
 
                 }
             });
