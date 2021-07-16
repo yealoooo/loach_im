@@ -14,19 +14,14 @@ import java.io.Serializable;
 public class RequestMessage extends Message implements Serializable {
 
     /**
-     * token
-     */
-    private String authToken;
-
-    /**
      * 发送方
      */
-    private String fromId;
+    private String fromUid;
 
     /**
      * 目标
      */
-    private String toId;
+    private String toUid;
 
     /**
      * 数据类型

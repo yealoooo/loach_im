@@ -9,6 +9,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 @Slf4j
 public class SingleMessageRequestHandler extends SimpleChannelInboundHandler<SingleChatRequestMessage> {
 
@@ -16,16 +18,14 @@ public class SingleMessageRequestHandler extends SimpleChannelInboundHandler<Sin
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, SingleChatRequestMessage msg) {
-        log.info("服务端读取到SingleMessageRequest： {}", msg);
-        String toId = msg.getToId();
+//        log.info("服务端读取到SingleMessageRequest： {}", msg);
 //
 //        ChannelHandlerContext toUserCtx = SessionContainer.getCtxByUserId(toId);
 //        if (null == toUserCtx) {
 //            log.error("用户未在线");
 //        }else {
         SingleChatResponseMessage singleChatResponseMessage = singleMessageService.getSendMessageModel(msg);
-        singleChatResponseMessage.setContent("你好");
-        ctx.writeAndFlush(singleChatResponseMessage);
+        Objects.requireNonNull(SessionContainer.getChannelByUid(singleChatResponseMessage.getToId())).writeAndFlush(singleChatResponseMessage);
 //        }
 
     }

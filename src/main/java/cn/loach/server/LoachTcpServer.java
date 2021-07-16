@@ -50,7 +50,7 @@ public class LoachTcpServer implements LoachTcpServerInterface{
 
                 }
             });
-            ChannelFuture channelFuture = serverBootstrap.bind(8080).sync();
+            ChannelFuture channelFuture = serverBootstrap.bind(8088).sync();
             channelFuture.channel().closeFuture().sync();
         }catch (InterruptedException ex) {
             log.error("server error :{}", ex.getMessage());

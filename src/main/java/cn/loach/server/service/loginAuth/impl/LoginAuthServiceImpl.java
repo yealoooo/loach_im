@@ -5,7 +5,11 @@ import cn.loach.server.message.request.LoginAuthRequestMessage;
 import cn.loach.server.message.response.LoginAuthResponseMessage;
 import cn.loach.server.service.loginAuth.LoginAuthService;
 import cn.loach.server.session.SessionContainer;
+import cn.loach.util.StringUtil;
+import cn.loach.util.TokenUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LoginAuthServiceImpl implements LoginAuthService {
 
     private static volatile LoginAuthServiceImpl loginAuthService;
@@ -28,8 +32,14 @@ public class LoginAuthServiceImpl implements LoginAuthService {
         LoginAuthResponseMessage loginAuthResponseMessage = new LoginAuthResponseMessage();
 
         String authToken = loginAuthRequestMessage.getAuthToken();
-        if (authToken.equals("token")) {
+        if (StringUtil.isEmpty(authToken)) {
+            log.error("token 为空");
+            return null;
+        }
+
+        if (TokenUtil.isUse(authToken)) {
             loginAuthResponseMessage.setCode(200);
+            loginAuthResponseMessage.setRequestFlag(true);
             loginAuthResponseMessage.setContentType(MessageContentTypeEnum.TEXT);
             loginAuthResponseMessage.setContent("认证成功");
 

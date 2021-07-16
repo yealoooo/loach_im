@@ -5,14 +5,18 @@ import java.util.Map;
 
 public class TokenUtil {
     private static final Map<String, String> tokenMap = new HashMap<String, String>(){{
-        put("token", "1:uoi123");
-        put("token2", "1:uoi456");
+        put("token", "token");
+        put("token2", "token2");
+        put("token3", "token3");
+        put("token4", "token4");
     }};
 
 
-    public String getAppIdAndUid(String token) {
+    public static String getAppIdAndUid(String token) {
+        return tokenMap.get(token);
+    }
 
-
-        return null;
+    public static boolean isUse(String token) {
+        return tokenMap.containsKey(token);
     }
 }

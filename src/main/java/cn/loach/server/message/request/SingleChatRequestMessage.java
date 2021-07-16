@@ -41,8 +41,8 @@ public class SingleChatRequestMessage extends RequestMessage implements Serializ
     public String toString() {
 
         return "SingleChatMessage{" +
-                "fromId='" + super.getFromId() + '\'' +
-                ", toId='" + super.getToId() + '\'' +
+                "fromId='" + super.getFromUid() + '\'' +
+                ", toId='" + super.getToUid() + '\'' +
                 ", content='" + content + '\'' +
                 '}' + super.toString();
     }
