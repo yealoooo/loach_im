@@ -31,6 +31,16 @@ public class ResponseMessage extends Message {
      */
     private int contentType;
 
+    /**
+     * 发送者
+     */
+    private String fromUid;
+
+    /**
+     * 接收者
+     */
+    private String toUid;
+
 
     public void setContentType(MessageContentTypeEnum messageContentTypeEnum) {
         this.contentType = messageContentTypeEnum.ordinal();

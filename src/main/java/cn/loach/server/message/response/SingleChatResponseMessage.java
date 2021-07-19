@@ -1,6 +1,5 @@
 package cn.loach.server.message.response;
 
-import cn.loach.server.enums.MessageContentTypeEnum;
 import cn.loach.server.message.Message;
 import cn.loach.util.MessageIdGenerator;
 import lombok.Getter;
@@ -15,14 +14,20 @@ public class SingleChatResponseMessage extends ResponseMessage{
     private String content;
 
     /**
-     * 发送者
+     * 昵称
      */
-    private String fromId;
+    private String fromNickName;
 
     /**
-     * 接收者
+     * 头像
      */
-    private String toId;
+    private String fromAvatar;
+
+    /**
+     * 会话Id
+     */
+    private String conversationId;
+
 
     public SingleChatResponseMessage() {
         setTimeStamp(System.currentTimeMillis());

@@ -1,5 +1,6 @@
 package cn.loach.server.handler.webSocket;
 
+import cn.loach.server.session.SessionContainer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -9,6 +10,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
+import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import static io.netty.handler.codec.http.HttpUtil.isKeepAlive;
@@ -31,23 +33,24 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        //添加连接
-        log.debug("WebSocketServerHandler 客户端加入连接："+ctx.channel());
-//        ChannelSupervise.addChannel(ctx.channel());
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+        SessionContainer.setWebSocket(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         //断开连接
         log.debug("WebSocketServerHandler 客户端断开连接："+ctx.channel());
-//        ChannelSupervise.removeChannel(ctx.channel());
+        SessionContainer.removeAll(ctx);
+    }
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        System.out.println("发生异常：" + cause.getMessage());
+        SessionContainer.removeAll(ctx);
+        ctx.close();
     }
 
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
-    }
+
     private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame){
         // 判断是否关闭链路的指令
         if (frame instanceof CloseWebSocketFrame) {
@@ -62,8 +65,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         }
 
         if (frame instanceof BinaryWebSocketFrame) {
-            ByteBuf byteBuf = frame.content();
-            ctx.fireChannelRead(byteBuf);
+            ByteBuf content = frame.content();
+            content.retain();
+            ctx.fireChannelRead(content);
         }
 
     }

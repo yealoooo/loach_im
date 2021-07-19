@@ -1,10 +1,13 @@
 package cn.loach.server.service.loginAuth.impl;
 
 import cn.loach.server.enums.MessageContentTypeEnum;
+import cn.loach.server.message.Message;
 import cn.loach.server.message.request.LoginAuthRequestMessage;
 import cn.loach.server.message.response.LoginAuthResponseMessage;
 import cn.loach.server.service.loginAuth.LoginAuthService;
 import cn.loach.server.session.SessionContainer;
+import cn.loach.util.JwtUtil;
+import cn.loach.util.MessageIdGenerator;
 import cn.loach.util.StringUtil;
 import cn.loach.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +32,15 @@ public class LoginAuthServiceImpl implements LoginAuthService {
 
     @Override
     public LoginAuthResponseMessage authLoginData(LoginAuthRequestMessage loginAuthRequestMessage) {
-        LoginAuthResponseMessage loginAuthResponseMessage = new LoginAuthResponseMessage();
 
         String authToken = loginAuthRequestMessage.getAuthToken();
         if (StringUtil.isEmpty(authToken)) {
             log.error("token 为空");
-            return null;
+            return authError();
         }
 
-        if (TokenUtil.isUse(authToken)) {
+        if (JwtUtil.verify(authToken) != null) {
+            LoginAuthResponseMessage loginAuthResponseMessage = new LoginAuthResponseMessage();
             loginAuthResponseMessage.setCode(200);
             loginAuthResponseMessage.setRequestFlag(true);
             loginAuthResponseMessage.setContentType(MessageContentTypeEnum.TEXT);
@@ -45,6 +48,16 @@ public class LoginAuthServiceImpl implements LoginAuthService {
 
             return loginAuthResponseMessage;
         }
-        return null;
+        return authError();
+    }
+
+    private LoginAuthResponseMessage authError() {
+        LoginAuthResponseMessage loginAuthResponseMessage = new LoginAuthResponseMessage();
+        loginAuthResponseMessage.setCode(501);
+        loginAuthResponseMessage.setResponseMessage("认证失败");
+        loginAuthResponseMessage.setChatType(Message.AUTH);
+        loginAuthResponseMessage.setMessageType(Message.MESSAGE_RESPONSE_TYPE);
+        loginAuthResponseMessage.setMessageId(MessageIdGenerator.getMessageId());
+        return loginAuthResponseMessage;
     }
 }

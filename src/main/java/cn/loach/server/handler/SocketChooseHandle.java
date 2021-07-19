@@ -1,5 +1,6 @@
 package cn.loach.server.handler;
 
+import cn.loach.server.handler.tcp.TcpServerHandler;
 import cn.loach.server.handler.webSocket.WebSocketServerHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,7 +23,7 @@ public class SocketChooseHandle extends ByteToMessageDecoder {
         String protocol = getBufStart(in);
         if (protocol.startsWith(WEBSOCKET_PREFIX)) {
             websocketAdd(ctx);
-            ctx.pipeline().remove("lengthFieldFrameProtocolHandler");
+//            ctx.pipeline().remove("tcp-handler");
         }
 
         in.resetReaderIndex();
@@ -32,28 +33,16 @@ public class SocketChooseHandle extends ByteToMessageDecoder {
     public  void websocketAdd(ChannelHandlerContext ctx){
 
         // HttpServerCodec：将请求和应答消息解码为HTTP消息
-//        ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler","http-codec",new HttpServerCodec());
+        ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler","http-codec",new HttpServerCodec());
 
         // HttpObjectAggregator：将HTTP消息的多个部分合成一条完整的HTTP消息
-//        ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler","aggregator",new HttpObjectAggregator(65535));
+        ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler","aggregator",new HttpObjectAggregator(65535));
 
         // ChunkedWriteHandler：向客户端发送HTML5文件
-//        ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler","http-chunked",new ChunkedWriteHandler());
+        ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler","http-chunked",new ChunkedWriteHandler());
 
 //        ctx.pipeline().addBefore("byteToBuf","WebSocketAggregator",new WebSocketFrameAggregator(65535));
-//        ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler", "webSocketHandler",new WebSocketServerHandler());//自定义的业务handler
-
-        // HttpServerCodec：将请求和应答消息解码为HTTP消息
-        ctx.pipeline().addBefore("tcpByteDecode","http-codec",new HttpServerCodec());
-
-        // HttpObjectAggregator：将HTTP消息的多个部分合成一条完整的HTTP消息
-        ctx.pipeline().addBefore("tcpByteDecode","aggregator",new HttpObjectAggregator(65535));
-
-        // ChunkedWriteHandler：向客户端发送HTML5文件
-        ctx.pipeline().addBefore("tcpByteDecode","http-chunked",new ChunkedWriteHandler());
-
-//        ctx.pipeline().addBefore("byteToBuf","WebSocketAggregator",new WebSocketFrameAggregator(65535));
-        ctx.pipeline().addBefore("tcpByteDecode", "webSocketHandler",new WebSocketServerHandler());//自定义的业务handler
+        ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler", "webSocketHandler",new WebSocketServerHandler());//自定义的业务handler
     }
 
 

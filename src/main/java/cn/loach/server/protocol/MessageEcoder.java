@@ -2,9 +2,11 @@ package cn.loach.server.protocol;
 
 import cn.loach.server.message.Message;
 import cn.loach.server.serializable.LoachSerializable;
+import cn.loach.server.session.SessionContainer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,5 +49,9 @@ public class MessageEcoder extends MessageToByteEncoder<Message> {
         // 8. 写入内容
         byteBuf.writeBytes(dataBytes);
 
+        if (SessionContainer.isAtWebSocket(ctx)) {
+            byteBuf.retain();
+            ctx.writeAndFlush(new BinaryWebSocketFrame(byteBuf));
+        }
     }
 }

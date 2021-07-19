@@ -1,5 +1,6 @@
 package cn.loach.server.handler;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 public class LengthFieldFrameProtocolHandler extends LengthFieldBasedFrameDecoder {
