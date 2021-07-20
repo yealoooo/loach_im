@@ -28,6 +28,8 @@ public class RequestMessage extends Message implements Serializable {
      */
     private int contentType;
 
+    private String conversationId;
+
     public void setContentType(MessageContentTypeEnum messageContentTypeEnum) {
         this.contentType = messageContentTypeEnum.ordinal();
     }
