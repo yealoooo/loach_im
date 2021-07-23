@@ -1,12 +1,16 @@
 package cn.loach.server.service.singleMessage;
 
+import cn.loach.server.entity.SynchronizeMessageEntity;
 import cn.loach.server.enums.MessageContentTypeEnum;
 import cn.loach.server.message.Message;
 import cn.loach.server.message.request.SingleChatRequestMessage;
 import cn.loach.server.message.response.SingleChatResponseMessage;
 import cn.loach.server.model.UserInfoModel;
 import cn.loach.server.session.SessionContainer;
+import cn.loach.util.HttpUtil;
+import com.alibaba.fastjson.JSON;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class SingleMessageServiceIMpl implements SingleMessageService {
@@ -27,19 +31,13 @@ public class SingleMessageServiceIMpl implements SingleMessageService {
 
     @Override
     public SingleChatResponseMessage getSendMessageModel(SingleChatRequestMessage message) {
+        return SingleChatResponseMessage.SingleChatRequestMessageConversionThis(message);
+    }
 
-        SingleChatResponseMessage singleChatResponseMessage = new SingleChatResponseMessage();
-        singleChatResponseMessage.setCode(200);
-        singleChatResponseMessage.setContentType(MessageContentTypeEnum.TEXT);
-        singleChatResponseMessage.setContent(message.getContent());
-        singleChatResponseMessage.setRequestFlag(true);
+    @Override
+    public void synchronizeMessage(SingleChatResponseMessage singleChatResponseMessage) {
+        SynchronizeMessageEntity synchronizeMessageEntity = SynchronizeMessageEntity.SingleChatMessageConversationThis(singleChatResponseMessage);
 
-        singleChatResponseMessage.setFromUid(message.getFromUid());
-        UserInfoModel userInfoByUid = SessionContainer.getUserInfoByUid(message.getFromUid());
-        singleChatResponseMessage.setFromAvatar(userInfoByUid.getAvatar());
-        singleChatResponseMessage.setFromNickName(userInfoByUid.getNickName());
-
-        singleChatResponseMessage.setToUid(message.getToUid());
-        return singleChatResponseMessage;
+        HttpUtil.post("http://127.0.0.1:8081/message/insert", JSON.toJSONString(synchronizeMessageEntity));
     }
 }

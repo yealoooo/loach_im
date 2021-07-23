@@ -12,4 +12,5 @@ public class UserInfoModel {
     private String uid;
     private String nickName;
     private String avatar;
+    private Integer appId;
 }

@@ -5,11 +5,9 @@ import cn.loach.server.message.Message;
 import cn.loach.server.message.request.LoginAuthRequestMessage;
 import cn.loach.server.message.response.LoginAuthResponseMessage;
 import cn.loach.server.service.loginAuth.LoginAuthService;
-import cn.loach.server.session.SessionContainer;
-import cn.loach.util.JwtUtil;
+import cn.loach.server.service.redis.impl.RedisServiceImpl;
 import cn.loach.util.MessageIdGenerator;
 import cn.loach.util.StringUtil;
-import cn.loach.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -39,7 +37,7 @@ public class LoginAuthServiceImpl implements LoginAuthService {
             return authError();
         }
 
-        if (JwtUtil.verify(authToken) != null) {
+        if (RedisServiceImpl.getInstance().existsToken(authToken)) {
             LoginAuthResponseMessage loginAuthResponseMessage = new LoginAuthResponseMessage();
             loginAuthResponseMessage.setCode(200);
             loginAuthResponseMessage.setRequestFlag(true);

@@ -1,39 +1,30 @@
 package cn.loach.server.session;
 
-import cn.loach.server.message.Message;
-import cn.loach.server.message.request.RequestMessage;
-import cn.loach.server.message.request.SingleChatRequestMessage;
 import cn.loach.server.message.response.ResponseMessage;
 import cn.loach.server.model.UserInfoModel;
 import cn.loach.util.StringUtil;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SessionContainer {
-    private static final Map<String, String> uidToTokenMap = new HashMap<>();
-    private static final Map<String, List<ChannelHandlerContext>> uidToChannelMap = new HashMap<>();
+    private static final Map<String, ChannelHandlerContext> uidToChannelMap = new HashMap<>();
     private static final Map<String, String> channelIdToUid = new HashMap<>();
     private static final Map<String, UserInfoModel> uidToUserInfo = new HashMap<>();
 
     private static final Set<String> tcpChannelId = new HashSet<>();
     private static final Set<String> webSocketChannelId = new HashSet<>();
 
-    public static boolean set(UserInfoModel userInfoModel, String token, ChannelHandlerContext ctx) {
+    public static void set(UserInfoModel userInfoModel, String token, ChannelHandlerContext ctx) {
         String uid = userInfoModel.getUid();
-        if (uidToChannelMap.containsKey(uid)) {
-            uidToChannelMap.get(uid).add(ctx);
-        }else {
-            uidToChannelMap.put(uid, new ArrayList<ChannelHandlerContext>(){{
-                add(ctx);
-            }});
+        String useUid = /*userInfoModel.getAppId() + ":" +*/ uid;
+        if (uidToChannelMap.containsKey(useUid)) {
+            removeAll(uidToChannelMap.get(useUid));
         }
 
+        uidToChannelMap.put(/*userInfoModel.getAppId() + ":" +*/ uid, ctx);
         uidToUserInfo.put(uid, userInfoModel);
-        uidToTokenMap.put(uid, token);
         channelIdToUid.put(ctx.channel().id().asLongText(), uid);
-        return true;
     }
 
     public static UserInfoModel getUserInfoByUid(String uid) {
@@ -43,11 +34,6 @@ public class SessionContainer {
     public static ChannelHandlerContext getChannelByUid(String uid) {
         if (StringUtil.isEmpty(uid)) return null;
         return null;
-    }
-
-    public static String getTokenByUid(String uid) {
-        if (StringUtil.isEmpty(uid)) return null;
-        return uidToTokenMap.get(uid);
     }
 
     public static String getUidByChannel(ChannelHandlerContext ctx) {
@@ -70,23 +56,22 @@ public class SessionContainer {
         String channelId = ctx.channel().id().asLongText();
         tcpChannelId.remove(channelId);
         webSocketChannelId.remove(channelId);
+        tcpChannelId.remove(channelId);
         String uid = channelIdToUid.get(channelId);
         if (!StringUtil.isEmpty(uid)) {
-            uidToTokenMap.remove(uid);
             uidToChannelMap.remove(uid);
             channelIdToUid.remove(channelId);
+            uidToUserInfo.remove(uid);
         }
+        ctx.close();
         return true;
     }
 
-    public static boolean send(ResponseMessage message) {
+    public static void send(ResponseMessage message) {
         String toUid = message.getToUid();
-        List<ChannelHandlerContext> channelHandlerContexts = uidToChannelMap.get(toUid);
-        if (null != channelHandlerContexts) {
-            for (ChannelHandlerContext channelHandlerContext : uidToChannelMap.get(toUid)) {
-                channelHandlerContext.writeAndFlush(message);
-            }
+        ChannelHandlerContext channelHandlerContext = uidToChannelMap.get(toUid);
+        if (null != channelHandlerContext) {
+            channelHandlerContext.writeAndFlush(message);
         }
-        return true;
     }
 }
