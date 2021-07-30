@@ -43,7 +43,7 @@ public class SingleChatResponseMessage extends ResponseMessage{
         SingleChatResponseMessage singleChatResponseMessage = new SingleChatResponseMessage();
 
         singleChatResponseMessage.setCode(200);
-        singleChatResponseMessage.setContentType(MessageContentTypeEnum.TEXT);
+        singleChatResponseMessage.setContentType(singleChatRequestMessage.getContentType());
         singleChatResponseMessage.setContent(singleChatRequestMessage.getContent());
         singleChatResponseMessage.setRequestFlag(true);
         singleChatResponseMessage.setMessageId(singleChatRequestMessage.getMessageId());

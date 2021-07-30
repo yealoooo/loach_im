@@ -35,8 +35,16 @@ public class SingleMessageServiceIMpl implements SingleMessageService {
     }
 
     @Override
-    public void synchronizeMessage(SingleChatResponseMessage singleChatResponseMessage) {
+    public void synchronizeMessage(SingleChatResponseMessage singleChatResponseMessage, boolean sendStatus) {
         SynchronizeMessageEntity synchronizeMessageEntity = SynchronizeMessageEntity.SingleChatMessageConversationThis(singleChatResponseMessage);
+
+        if (sendStatus) {
+            synchronizeMessageEntity.setSendStatus(1);
+            synchronizeMessageEntity.setIsPush(0);
+        }else {
+            synchronizeMessageEntity.setSendStatus(0);
+            synchronizeMessageEntity.setIsPush(1);
+        }
 
         HttpUtil.post("http://127.0.0.1:8081/message/insert", JSON.toJSONString(synchronizeMessageEntity));
     }

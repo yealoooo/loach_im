@@ -31,7 +31,6 @@ public class SocketChooseHandle extends ByteToMessageDecoder {
     }
 
     public  void websocketAdd(ChannelHandlerContext ctx){
-
         // HttpServerCodec：将请求和应答消息解码为HTTP消息
         ctx.pipeline().addBefore("lengthFieldFrameProtocolHandler","http-codec",new HttpServerCodec());
 

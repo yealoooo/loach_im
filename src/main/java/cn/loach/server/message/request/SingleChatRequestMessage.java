@@ -1,6 +1,8 @@
 package cn.loach.server.message.request;
 
 
+import cn.loach.server.message.Message;
+import cn.loach.util.MessageIdGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class SingleChatRequestMessage extends RequestMessage implements Serializable {
     /**
      * 数据体
@@ -36,6 +37,12 @@ public class SingleChatRequestMessage extends RequestMessage implements Serializ
     private String ext;
 
 
+    public SingleChatRequestMessage() {
+        setMessageId(MessageIdGenerator.getMessageId());
+        setChatType(Message.SINGLE);
+        setMessageType(Message.MESSAGE_REQUEST_TYPE);
+        setTimeStamp(System.currentTimeMillis());
+    }
 
     @Override
     public String toString() {

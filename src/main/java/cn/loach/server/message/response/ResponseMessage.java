@@ -45,4 +45,8 @@ public class ResponseMessage extends Message {
     public void setContentType(MessageContentTypeEnum messageContentTypeEnum) {
         this.contentType = messageContentTypeEnum.ordinal();
     }
+
+    public void setContentType(int contentType) {
+        this.contentType = contentType;
+    }
 }

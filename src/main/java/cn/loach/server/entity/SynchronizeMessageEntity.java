@@ -26,17 +26,17 @@ public class SynchronizeMessageEntity {
 
     private Integer msgType;
 
-    private String msg;
+    private String content;
 
     private Date sendTime;
 
-    private String sendStatus;
+    private Integer sendStatus;
 
-    private String readStatus;
+    private Integer readStatus;
 
-    private String isPush;
+    private Integer isPush;
 
-    private String pushStatus;
+    private Integer pushStatus;
 
     private Integer contentType;
 
@@ -52,10 +52,14 @@ public class SynchronizeMessageEntity {
                 .appId(appId)
                 .chatType(singleChatResponseMessage.getChatType())
                 .contentType(singleChatResponseMessage.getContentType())
-                .msg(singleChatResponseMessage.getContent())
+                .content(singleChatResponseMessage.getContent())
                 .sendTime(new Date())
-                .fromUid(singleChatResponseMessage.getFromUid())
-                .toUid(singleChatResponseMessage.getToUid())
+                .fromUid(splitUid(singleChatResponseMessage.getFromUid()))
+                .toUid(splitUid(singleChatResponseMessage.getToUid()))
                 .conversationId(singleChatResponseMessage.getConversationId()).build();
+    }
+
+    private static String splitUid(String appIdAndUid) {
+        return appIdAndUid.contains(":") ? appIdAndUid.split(":")[1] : appIdAndUid;
     }
 }

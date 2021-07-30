@@ -19,16 +19,14 @@ import java.util.Objects;
 @Slf4j
 public class SingleMessageRequestHandler extends SimpleChannelInboundHandler<SingleChatRequestMessage> {
 
-    private SingleMessageService singleMessageService = SingleMessageServiceIMpl.getInstance();
-
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, SingleChatRequestMessage msg) {
-        SingleChatResponseMessage singleChatResponseMessage = singleMessageService.getSendMessageModel(msg);
+        SingleChatResponseMessage singleChatResponseMessage = SingleMessageServiceIMpl.getInstance().getSendMessageModel(msg);
 
-        SessionContainer.send(singleChatResponseMessage);
+        boolean sendStatus = SessionContainer.send(singleChatResponseMessage);
 
         // 同步消息
-        singleMessageService.synchronizeMessage(singleChatResponseMessage);
+        SingleMessageServiceIMpl.getInstance().synchronizeMessage(singleChatResponseMessage, sendStatus);
     }
 }
 

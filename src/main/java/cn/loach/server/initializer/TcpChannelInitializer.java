@@ -24,6 +24,7 @@ public class TcpChannelInitializer extends ChannelInitializer<SocketChannel> {
         ch.pipeline().addLast(new SocketChooseHandle());
         // tcp 链接记录处理器
 //        ch.pipeline().addLast("tcp-handler", tcpServerHandler);
+
         // 粘包半包处理器
         ch.pipeline().addLast("lengthFieldFrameProtocolHandler", new LengthFieldFrameProtocolHandler());
         // 编解码处理器

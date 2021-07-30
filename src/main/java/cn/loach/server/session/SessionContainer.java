@@ -17,14 +17,14 @@ public class SessionContainer {
 
     public static void set(UserInfoModel userInfoModel, String token, ChannelHandlerContext ctx) {
         String uid = userInfoModel.getUid();
-        String useUid = /*userInfoModel.getAppId() + ":" +*/ uid;
+        String useUid = userInfoModel.getAppId() + ":" + uid;
         if (uidToChannelMap.containsKey(useUid)) {
             removeAll(uidToChannelMap.get(useUid));
         }
 
-        uidToChannelMap.put(/*userInfoModel.getAppId() + ":" +*/ uid, ctx);
-        uidToUserInfo.put(uid, userInfoModel);
-        channelIdToUid.put(ctx.channel().id().asLongText(), uid);
+        uidToChannelMap.put(useUid, ctx);
+        uidToUserInfo.put(useUid, userInfoModel);
+        channelIdToUid.put(ctx.channel().id().asLongText(), useUid);
     }
 
     public static UserInfoModel getUserInfoByUid(String uid) {
@@ -67,11 +67,13 @@ public class SessionContainer {
         return true;
     }
 
-    public static void send(ResponseMessage message) {
+    public static boolean send(ResponseMessage message) {
         String toUid = message.getToUid();
         ChannelHandlerContext channelHandlerContext = uidToChannelMap.get(toUid);
         if (null != channelHandlerContext) {
             channelHandlerContext.writeAndFlush(message);
+            return true;
         }
+        return false;
     }
 }

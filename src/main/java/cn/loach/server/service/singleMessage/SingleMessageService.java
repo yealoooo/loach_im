@@ -7,5 +7,5 @@ public interface SingleMessageService {
 
     SingleChatResponseMessage getSendMessageModel(SingleChatRequestMessage message);
 
-    void synchronizeMessage(SingleChatResponseMessage singleChatResponseMessage);
+    void synchronizeMessage(SingleChatResponseMessage singleChatResponseMessage, boolean sendStatus);
 }
